@@ -45,6 +45,7 @@ class LoginController extends Controller
 
             $this->redirectTo = route('author.dashboard');
         }
+
         $this->middleware('guest')->except('logout');
     }
 }
