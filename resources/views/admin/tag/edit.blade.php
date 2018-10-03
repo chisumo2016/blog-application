@@ -17,17 +17,18 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            ADD NEW TAG
+                            EDIT TAG
 
                         </h2>
 
                     </div>
                     <div class="body">
-                        <form action="{{ route('admin.tag.store') }}" method="POST">
+                        <form action="{{ route('admin.tag.update', $tag->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" id="name" name="name" class="form-control" >
+                                    <input type="text" id="name" name="name" class="form-control" value="{{ $tag->name }}">
                                     <label class="form-label">Tag Name</label>
                                 </div>
                             </div>
