@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Category;
 use App\Post;
@@ -23,9 +23,8 @@ class PostController extends Controller
     public function index()
     {
         //
-
-        $posts = Post::latest()->get();
-        return view('admin.post.index', compact('posts'));
+        $posts = Auth::user()->posts()->latest()->get();
+        return view('author.post.index', compact('posts'));
     }
 
     /**
@@ -36,12 +35,9 @@ class PostController extends Controller
     public function create()
     {
         //
-
-         $categories = Category::all();
-         $tags = Tag::all();
-         return view('admin.post.create', compact('categories', 'tags'));
-
-
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('author.post.create', compact('categories', 'tags'));
     }
 
     /**
@@ -52,8 +48,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        //
         $this->validate($request,[
-           'title'          => 'required',
+            'title'          => 'required',
             'image'         =>  'required',
             'categories'    =>  'required',
             'tags'          =>  'required',
@@ -102,7 +99,7 @@ class PostController extends Controller
             $post->status = false;
         }
 
-        $post->is_approved  = true;
+        $post->is_approved  = false;
 
         $post->save();
 
@@ -112,7 +109,7 @@ class PostController extends Controller
 
         Toastr::success('Post Successfully Created !', 'Success');
 
-        return redirect()->route('admin.post.index');
+        return redirect()->route('author.post.index');
     }
 
     /**
@@ -125,7 +122,7 @@ class PostController extends Controller
     {
         //
 
-        return view('admin.post.show', compact('post'));
+        return view('author.post.show', compact('post'));
     }
 
     /**
@@ -137,9 +134,11 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
+
+        //
         $categories = Category::all();
         $tags = Tag::all();
-        return view('admin.post.edit', compact('post','categories', 'tags'));
+        return view('author.post.edit', compact('post','categories', 'tags'));
     }
 
     /**
@@ -151,6 +150,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        //
         //
         $this->validate($request,[
             'title'          => 'required',
@@ -209,7 +209,7 @@ class PostController extends Controller
             $post->status = false;
         }
 
-        $post->is_approved  = true;
+        $post->is_approved  = false;
 
         $post->save();
 
@@ -219,7 +219,7 @@ class PostController extends Controller
 
         Toastr::success('Post Successfully Update !', 'Success');
 
-        return redirect()->route('admin.post.index');
+        return redirect()->route('author.post.index');
     }
 
     /**
@@ -230,6 +230,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        //
         //Cheking if the image exists
 
         if(Storage::disk('public')->exists('post/'. $post->image))
@@ -243,8 +244,6 @@ class PostController extends Controller
 
         Toastr::success('Post Successfully Deleted !', 'Success');
 
-        return redirect()->route('admin.post.index');
-
-        //return $post;
+        return redirect()->route('author.post.index');
     }
 }
