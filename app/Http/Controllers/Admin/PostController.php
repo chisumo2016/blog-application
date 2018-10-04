@@ -230,6 +230,25 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        //Cheking if the image exists
+
+        if(Storage::disk('public')->exists('post/'. $post->image))
+        {
+            Storage::disk('public')->delete('post/'.$post->image);
+        }
+
+        //Dettach categories and tags
+        $post->categories()->detach();
+        $post->tags()->detach();
+
+        Toastr::success('Post Successfully Deleted !', 'Success');
+
+        return redirect()->route('admin.post.index');
+
+
+
+
+
+        //return $post;
     }
 }
