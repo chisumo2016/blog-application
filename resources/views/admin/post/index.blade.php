@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', 'Category')
+@section('title', 'Post')
 
 @push('css')
     <!-- JQuery DataTable Css -->
@@ -12,10 +12,9 @@
 @section('content')
     <div class="container-fluid">
         <div class="block-header">
-            <a class="btn btn-primary waves-effect" href="{{ route('admin.category.create') }}">
+            <a class="btn btn-primary waves-effect" href="{{ route('admin.post.create') }}">
                 <i class="material-icons">add</i>
-                <span>Add New Category</span>
-                <span class="badge bg-blue">{{ $catgories->count() }}</span>
+                <span>Add New Post</span>
             </a>
 
         </div>
@@ -26,7 +25,8 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            ALL Category
+                            ALL POSTS
+                              <span class="badge bg-blue">{{ $posts->count() }}</span>
                         </h2>
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
@@ -47,9 +47,12 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Post Count </th>
-                                    <th>Created At </th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th> <i class="material-icons">visibility</i></th>
+                                    <th>Is Approved</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
                                     <th>Updated At</th>
                                     <th>Action</th>
 
@@ -58,32 +61,52 @@
                                 <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Post Count</th>
-                                    <th>Created At </th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th><i class="material-icons">visibility</i></th>
+                                    <th>Is Approved</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
                                     <th>Updated At</th>
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
 
-                                    @foreach($categories as $key=>$category)
+                                    @foreach($posts as $key=>$post)
                                         <tr>
                                        <td>{{ $key+1}}</td>
-                                       <td>{{ $category->name}}</td>
-                                       <td>{{ $category->posts->count()}}</td>
-                                       <td>{{ $category->created_at}}</td>
-                                       <td>{{ $category->updated_at}}</td>
+                                       <td>{{ str_limit($post->title,'10')}}</td>
+                                       <td>{{ $post->user->name}}</td>
+                                       <td>{{ $post->view_count}}</td>
+                                       <td>
+                                                @if($post->is_approved == true)
+                                                    <span class="badge bg-blue">Approved</span>
+                                                @else
+                                                    <span class="badge bg-pink">Pending</span>
+                                                @endif
+                                        </td>
+
+                                        <td>
+                                            @if($post->status == true)
+                                                <span class="badge bg-blue">Published</span>
+                                            @else
+                                                <span class="badge bg-pink">Pending</span>
+                                            @endif
+                                        </td>
+
+                                       <td>{{ $post->created_at}}</td>
+                                       <td>{{ $post->updated_at}}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.category.edit', $category->id) }}" class="btn btn-info waves-effect">
+                                            <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-info waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>
 
-                                            <button class="btn btn-danger waves-effect" type="button" onclick="deleteCategory({{ $category->id }})">
+                                            <button class="btn btn-danger waves-effect" type="button" onclick="deletePost({{ $post->id }})">
                                                 <i class="material-icons">delete</i>
                                             </button>
 
-                                            <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy',$category->id) }}" method="POST" style="display: none;">
+                                            <form id="delete-form-{{ $post->id }}" action="{{ route('admin.post.destroy',$post->id) }}" method="POST" style="display: none;">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
@@ -120,7 +143,7 @@
 <script src="https://unpkg.com/sweetalert2@7.24.0/dist/sweetalert2.all.js"></script>
 
 <script type="text/javascript">
-    function deleteCategory(id) {
+    function deletePost(id) {
 
 
         swal({
