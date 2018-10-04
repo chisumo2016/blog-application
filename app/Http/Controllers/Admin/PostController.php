@@ -39,7 +39,7 @@ class PostController extends Controller
 
          $categories = Category::all();
          $tags = Tag::all();
-        return view('admin.post.create', compact('categories', 'tags'));
+         return view('admin.post.create', compact('categories', 'tags'));
 
 
     }
@@ -135,6 +135,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.post.edit', compact('post','categories', 'tags'));
     }
 
     /**
@@ -147,6 +150,74 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         //
+        $this->validate($request,[
+            'title'          => 'required',
+            'image'         =>  'image',
+            'categories'    =>  'required',
+            'tags'          =>  'required',
+            'description'   =>  'required',
+        ]);
+
+        $image = $request->file('image');
+        $slug = str_slug($request->title);
+
+        if(isset($image))
+        {
+            // Make unique for image
+            $current_date  = Carbon::now()->toDateString();
+            $image_name    = $slug.'-'.$current_date.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+
+
+            //check post dir is exists
+            if(!Storage::disk('public')->exists('post'))
+            {
+                Storage::disk('public')->makeDirectory('post');
+            }
+
+            //Delete the old post  Image
+
+            if(Storage::disk('public')->exists('post/'.$post->image))
+            {
+                Storage::disk('public')->delete('post/'.$post->image);
+            }
+
+            //Resize image for posy and upload
+
+            $postImage = Image::make($image)->resize(1600,1066)->stream();
+
+            Storage::disk('public')->put('post/'.$image_name,$postImage );
+
+        }else{
+
+            $image_name = $post->image;
+        }
+
+
+        $post->user_id = Auth::id();
+        $post->title = $request ->title;
+        $post->slug  = $slug;
+        $post->image = $image_name;
+        $post->description = $request->description;
+
+        if(isset($request->status))
+        {
+            $post->status = true;
+
+        }else{
+            $post->status = false;
+        }
+
+        $post->is_approved  = true;
+
+        $post->save();
+
+        $post->categories()->sync($request->categories);
+
+        $post->tags()->sync($request->tags);
+
+        Toastr::success('Post Successfully Update !', 'Success');
+
+        return redirect()->route('admin.post.index');
     }
 
     /**
