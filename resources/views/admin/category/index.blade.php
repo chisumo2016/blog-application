@@ -15,7 +15,8 @@
             <a class="btn btn-primary waves-effect" href="{{ route('admin.category.create') }}">
                 <i class="material-icons">add</i>
                 <span>Add New Category</span>
-                <span class="badge bg-blue">{{ $categories->count() }}</span>
+
+
             </a>
 
         </div>
@@ -27,6 +28,7 @@
                     <div class="header">
                         <h2>
                             ALL Category
+                            <span class="badge bg-blue">{{ $categories->count() }}</span>
                         </h2>
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
