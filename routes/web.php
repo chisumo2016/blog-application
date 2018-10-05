@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
+
+        /* Subscriber*/
+Route::post('subscriber','SubscriberController@store')->name('subscriber.store');
 
 
     /* Admin Group Middleware */
@@ -35,6 +37,12 @@ Route::group(['as'=>'admin.', 'prefix' => 'admin', 'namespace'=>'Admin', 'middle
 
     Route::get('pending/post','PostController@pending')->name('post.pending');
     Route::put('/post/{id}/approved','PostController@approval')->name('post.approve');
+
+
+    //Subscriver
+
+    Route::get('/subscriber' ,'SubscriberController@index')->name('subscriber.index');
+    Route::delete('/subscriber/{subscriber}' ,'SubscriberController@destroy')->name('subscriber.destroy');
 
 
 });
