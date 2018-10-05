@@ -567,7 +567,7 @@ jQuery.extend({
 	},
 
 	// Convert dashed to camelCase; used by the css and data modules
-	// Microsoft forgot to hump their vendor prefix (#9572)
+	// Microsoft forgot to hump their vendor1 prefix (#9572)
 	camelCase: function( string ) {
 		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
@@ -6559,15 +6559,15 @@ var curCSS, iframe, iframeDoc,
 
 	eventsToggle = jQuery.fn.toggle;
 
-// return a css property mapped to a potentially vendor prefixed property
+// return a css property mapped to a potentially vendor1 prefixed property
 function vendorPropName( style, name ) {
 
-	// shortcut for names that are not vendor prefixed
+	// shortcut for names that are not vendor1 prefixed
 	if ( name in style ) {
 		return name;
 	}
 
-	// check for vendor prefixed names
+	// check for vendor1 prefixed names
 	var capName = name.charAt(0).toUpperCase() + name.slice(1),
 		origName = name,
 		i = cssPrefixes.length;
