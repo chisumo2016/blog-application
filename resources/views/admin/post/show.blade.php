@@ -14,20 +14,25 @@
         <a href="{{ route('admin.post.index') }}" class="btn btn-danger waves-effect">BACK</a>
 
         @if($post->is_approved == false)
-            <button type="button" class="btn btn-success pull-right">
+            <button type="button" class="btn btn-success waves-effect  pull-right" onclick="approvePost({{ $post->id }})">
                 <i class="material-icons">done</i>
                 <span>Approved</span>
             </button>
 
+            <form action="{{ route('admin.post.approve', $post->id) }}" id="approval-form" style="display:none;" method="post">
+                @csrf
+                @method('PUT')
+            </form>
             @else
 
-            <button type="button" class="btn btn-success pull-right" disabled="">
+            <button type="button" class="btn btn-success pull-right" disabled>
                 <i class="material-icons">done</i>
                 <span>Approved</span>
             </button>
 
             <br><br>
         @endif
+
         <div class="row clearfix">
             <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
@@ -65,8 +70,6 @@
                     </div>
                 </div>
 
-
-
         <div class="card">
             <div class="header bg-green">
                 <h2>
@@ -96,7 +99,7 @@
             </div>
         </div>
 
-
+            </div>
     </div>
     </div>
 @endsection
@@ -110,7 +113,9 @@
 <!-- TinyMCE -->
 <script src="{{ asset('assets/backend/plugins/tinymce/tinymce.js')}} "></script>
 
-<script>
+<script src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
+
+<script type="text/javascript">
 
     $(function () {
 
@@ -132,6 +137,41 @@
         tinymce.suffix = ".min";
         tinyMCE.baseURL = '{{ asset('assets/backend/plugins/tinymce') }}';
     });
+
+    function approvePost(id) {
+
+
+        swal({
+            title: 'Are you sure?',
+            text: "You approve this post",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, approve it!',
+            cancelButtonText: 'No, cancel!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            reverseButtons: true
+        }).then((result) => {
+            if  (result.value) {
+
+            document.getElementById('approval-form').submit()
+
+        } else if (
+            // Read more about handling dismissals
+        result.dismiss === swal.DismissReason.cancel
+        ) {
+            swal(
+                'Cancelled',
+                'The Post remain pending :)',
+                'info'
+            )
+        }
+    })
+    }
 </script>
+
 @endpush
 
