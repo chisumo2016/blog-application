@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
+use App\Notifications\AuthorPostApproved;
 use App\Post;
 use App\Tag;
 use Brian2694\Toastr\Facades\Toastr;
@@ -266,6 +267,10 @@ class PostController extends Controller
          {
              $post->is_approved =true;
              $post->save();
+
+             //Sending Notifcation to admin
+             $post->user->notify(new AuthorPostApproved($post));
+
 
              Toastr::success('Post Successfully Approved!', 'Success');
          }else{
