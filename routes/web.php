@@ -25,6 +25,9 @@ Route::group(['as'=>'admin.', 'prefix' => 'admin', 'namespace'=>'Admin', 'middle
 
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
+    Route::get('setting','SettingsController@index')->name('settings');
+    Route::put('profile-update','SettingsController@updateProfile')->name('profile.update');
+
     /* Tags*/
     Route::resource('tag', 'TagController');
     Route::resource('category', 'CategoryController');
