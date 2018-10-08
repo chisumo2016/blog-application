@@ -58,6 +58,10 @@ Route::group(['as'=>'author.','prefix' => 'author','namespace'=>'Author', 'middl
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
         Route::resource('post', 'PostController');
 
+    Route::get('setting','SettingsController@index')->name('settings');
+    Route::put('profile-update','SettingsController@updateProfile')->name('profile.update');
+    Route::put('password-update','SettingsController@updatePassword')->name('password.update');
+
 
 });
 
