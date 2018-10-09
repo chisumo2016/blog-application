@@ -22,8 +22,10 @@ Auth::routes();
         /* Subscriber*/
 Route::post('subscriber','SubscriberController@store')->name('subscriber.store');
 
+/* Favorite*/
 Route::group(['middleware' => 'auth'], function () {
         Route::post('favorite/{post}/add', 'FavoriteController@add')->name('post.favorite');
+        Route::post('comment/{post}', 'CommentController@store')->name('comment.store');
 });
 
     /* Admin Group Middleware */

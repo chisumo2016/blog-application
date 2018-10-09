@@ -11,7 +11,7 @@
 
             @guest
             <li><a href="{{ route('login') }}">Login</a></li>
-            
+
             @else
                     @if(Auth::user()->role_id == 1)
 
