@@ -41,12 +41,12 @@
                             <div class="post-info">
 
                                 <div class="left-area">
-                                    <a class="avatar" href="#"><img src="{{ Storage::disk('public')->url('profile/' .$post->user->image) }}" alt="Profile Image"></a>
+                                    <a class="avatar" href="#"><img src="{{ Storage::disk('public')->url('profile/'.$post->user->image) }}" alt="Profile Image"></a>
                                 </div>
 
                                 <div class="middle-area">
                                     <a class="name" href="#"><b>{{ $post->user->name }}</b></a>
-                                    <h6 class="date">on {{$post->created_at->diffForHumans() }}</h6>
+                                    <h6 class="date">on {{ $post->created_at->diffForHumans() }}</h6>
                                 </div>
 
                             </div><!-- post-info -->
@@ -54,10 +54,10 @@
                             <h3 class="title"><a href="#"><b>{{ $post->title }}</b></a></h3>
 
                             <div class="para">
-                                {!! html_entity_decode($post->description) !!}
+                                {!! html_entity_decode($post->body) !!}
                             </div>
 
-
+                            {{--{{ route('tag.posts',$tag->slug) }}--}}
                             <ul class="tags">
                                 @foreach($post->tags as $tag)
                                     <li><a href="#">{{ $tag->name }}</a></li>
@@ -67,31 +67,24 @@
 
                         <div class="post-icons-area">
                             <ul class="post-icons">
-
                                 <li>
-
                                     @guest
-                                    <a href="javascript:void(0);" onclick="toastr.info('To add fovorite list. You need to login first','Info',{
-                                                closeButton:    true,
-                                                progressBar:    true
-                                            })"><i class="ion-heart" ></i>{{ $post->favorite_to_users->count() }}
-                                    </a>
+                                    <a href="javascript:void(0);" onclick="toastr.info('To add favorite list. You need to login first.','Info',{
+                                                    closeButton: true,
+                                                    progressBar: true,
+                                                })"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
                                     @else
-
                                         <a href="javascript:void(0);" onclick="document.getElementById('favorite-form-{{ $post->id }}').submit();"
-                                           class="{{ !Auth::user()->favorite_posts->where('pivot.post_id', $post_id)->count() == 0 ? 'favorite_posts' : '' }}"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
-                                        <form id="favorite-form-{{$post->id}}" action="{{ route('post.favorite', $post->id )}}" method="POST" style="display: none;">
+                                           class="{{ !Auth::user()->favorite_posts->where('pivot.post_id',$post->id)->count()  == 0 ? 'favorite_posts' : ''}}"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
+
+                                        <form id="favorite-form-{{ $post->id }}" method="POST" action="{{ route('post.favorite',$post->id) }}" style="display: none;">
                                             @csrf
                                         </form>
                                         @endguest
 
-
                                 </li>
-                                <li><a href="#"><i class="ion-chatbubble"></i>6</a></li>
-                                <li><a href="#"><i class="ion-eye"></i>{{ $post->view_count}}</a></li>
-                                {{--<li><a href="#"><i class="ion-heart"></i>57</a></li>--}}
-                                {{--<li><a href="#"><i class="ion-chatbubble"></i>6</a></li>--}}
-                                {{--<li><a href="#"><i class="ion-eye"></i>138</a></li>--}}
+                                <li><a href="#"><i class="ion-chatbubble"></i>{{ $post->comments->count() }}</a></li>
+                                <li><a href="#"><i class="ion-eye"></i>{{ $post->view_count }}</a></li>
                             </ul>
 
                             <ul class="icons">
@@ -103,7 +96,6 @@
                         </div>
 
 
-
                     </div><!-- main-post -->
                 </div><!-- col-lg-8 col-md-12 -->
 
@@ -113,18 +105,16 @@
 
                         <div class="sidebar-area about-area">
                             <h4 class="title"><b>ABOUT AUTHOR</b></h4>
-                            <p>{{$post->user->about}}</p>
+                            <p>{{ $post->user->about }}</p>
                         </div>
-
 
                         <div class="tag-area">
 
                             <h4 class="title"><b>CATEGORIES</b></h4>
                             <ul>
-                               @foreach($post->categories as $category)
+                                @foreach($post->categories as $category)
                                     <li><a href="#">{{ $category->name }}</a></li>
-                               @endforeach
-
+                                @endforeach
                             </ul>
 
                         </div><!-- subscribe-area -->
@@ -163,23 +153,18 @@
                                         <li>
 
                                             @guest
-                                            <a href="javascript:void(0);" onclick="toastr.info('To add fovorite list. You need to login first','Info',{
-                                                closeButton:    true,
-                                                progressBar:    true
-                                            })"><i class="ion-heart" ></i>{{ $randompost->favorite_to_users->count() }}
-                                            </a>
-
+                                            <a href="javascript:void(0);" onclick="toastr.info('To add favorite list. You need to login first.','Info',{
+                                                    closeButton: true,
+                                                    progressBar: true,
+                                                })"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
                                             @else
+                                                <a href="javascript:void(0);" onclick="document.getElementById('favorite-form-{{ $post->id }}').submit();"
+                                                   class="{{ !Auth::user()->favorite_posts->where('pivot.post_id',$post->id)->count()  == 0 ? 'favorite_posts' : ''}}"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
 
-                                                <a href="javascript:void(0);" onclick="document.getElementById('favorite-form-{{ $randompost->id }}').submit();"
-                                                   class="{{ !Auth::user()->favorite_posts->where('pivot.post_id', $randompost_id)->count() == 0 ? 'favorite_posts' : '' }}"><i class="ion-heart"></i>{{ $post->favorite_to_users->count() }}</a>
-
-                                                <form id="favorite-form-{{ $randompost->id}}" action="{{ route('post.favorite', $randompost->id )}}" method="POST" style="display: none;">
+                                                <form id="favorite-form-{{ $post->id }}" method="POST" action="{{ route('post.favorite',$post->id) }}" style="display: none;">
                                                     @csrf
                                                 </form>
                                                 @endguest
-
-
                                         </li>
                                         <li><a href="#"><i class="ion-chatbubble"></i>6</a></li>
                                         <li><a href="#"><i class="ion-eye"></i>{{ $randompost->view_count}}</a></li>
@@ -217,7 +202,7 @@
                             <div class="row">
 
                                 <div class="col-sm-12">
-									<textarea name="contact-form-message" rows="2" class="text-area-messge form-control"
+									<textarea name="comment" rows="2" class="text-area-messge form-control"
                                               placeholder="Enter your comment" aria-required="true" aria-invalid="false"></textarea >
                                 </div><!-- col-sm-12 -->
                                 <div class="col-sm-12">
