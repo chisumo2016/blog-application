@@ -58,6 +58,12 @@ Route::group(['as'=>'admin.', 'prefix' => 'admin', 'namespace'=>'Admin', 'middle
 
     Route::get('/favorite' ,'FavoriteController@index')->name('favorite.index');
 
+    //Show Comment
+
+    Route::get('comments', 'CommentController@index')->name('comments.index');
+    Route::delete('comments/{id}', 'CommentController@destroy')->name('comment.destroy');
+
+
 
 });
 
@@ -78,6 +84,12 @@ Route::group(['as'=>'author.','prefix' => 'author','namespace'=>'Author', 'middl
     //Favorites
 
     Route::get('/favorite' ,'FavoriteController@index')->name('favorite.index');
+
+
+    //Show Comment
+
+    Route::get('comments', 'CommentController@index')->name('comment.index');
+    Route::delete('comments/{id}', 'CommentController@destroy')->name('comment.destroy');
 
 
 });
