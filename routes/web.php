@@ -25,6 +25,10 @@ Auth::routes();
         /* Subscriber*/
 Route::post('subscriber','SubscriberController@store')->name('subscriber.store');
 
+/* Subscriber*/
+Route::get('/search','SearchController@search')->name('search');
+
+
 /* Favorite*/
 Route::group(['middleware' => 'auth'], function () {
         Route::post('favorite/{post}/add', 'FavoriteController@add')->name('post.favorite');
@@ -103,6 +107,7 @@ View::composer('layouts.frontend.partials.footer', function ($view){
     $categories = App\Category::all();
     $view->with('categories',$categories);
 });
+
 
 
 

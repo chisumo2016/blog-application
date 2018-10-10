@@ -279,11 +279,11 @@ class PostController extends Controller
              $post->save();
 
              //Sending Notifcation to admin
-             $post->user->notify(new AuthorPostApproved($post));
 
              //send notification to subscriber
 
              $subscribers = Subscriber::all();
+             $post->user->notify(new AuthorPostApproved($post));
 
              foreach ($subscribers as $subscriber)
              {
@@ -295,6 +295,7 @@ class PostController extends Controller
          }else{
              Toastr::Info('This post is already approved !', 'Info');
          }
+
 
          return redirect()->back();
     }
