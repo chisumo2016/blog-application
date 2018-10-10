@@ -99,6 +99,13 @@ Route::group(['as'=>'author.','prefix' => 'author','namespace'=>'Author', 'middl
 
 
 
+View::composer('layouts.frontend.partials.footer', function ($view){
+    $categories = App\Category::all();
+    $view->with('categories',$categories);
+});
+
+
+
 
 
 
