@@ -53,7 +53,8 @@
         <div class="container">
 
             <div class="row">
-
+                {{--{{ Storage::disk('public')->url('profile/'.$post->user->image) }}--}}
+                {{--{{ route('author.profile', $post->user->username) }}--}}
                 @foreach($posts as $post)
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100">
@@ -61,7 +62,7 @@
 
                                 <div class="blog-image"><img src="{{ Storage::disk('public')->url('post/'.$post->image) }}" alt="{{ $post->title }}"></div>
 
-                                <a class="avatar" href="#"><img src="{{ Storage::disk('public')->url('profile/'.$post->user->image) }}" alt="Profile Image"></a>
+                                <a class="avatar" href="#"><img src="#"></a>
 
                                 <div class="blog-info">
 
@@ -97,6 +98,7 @@
                             </div><!-- single-post -->
                         </div><!-- card -->
                     </div><!-- col-lg-4 col-md-6 -->
+
                 @endforeach
 
             </div><!-- row -->
