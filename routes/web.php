@@ -70,12 +70,12 @@ Route::group(['as'=>'admin.', 'prefix' => 'admin', 'namespace'=>'Admin', 'middle
     Route::get('comments', 'CommentController@index')->name('comments.index');
     Route::delete('comments/{id}', 'CommentController@destroy')->name('comment.destroy');
 
+    Route::get('authors', 'AuthorController@index')->name('author.index');
+    Route::delete('authors/{id}', 'AuthorController@destroy')->name('author.destroy');
+
 
 
 });
-
-
-
 
     /* Author Group Middleware */
 Route::group(['as'=>'author.','prefix' => 'author','namespace'=>'Author', 'middleware'=>['auth','author']] ,function () {
